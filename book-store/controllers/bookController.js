@@ -3,7 +3,7 @@ const { Book, addBook, findBookByTitle } = require('../models/bookModel');
 const createBook = (req, res) => {
     const {title, author, year, price, genre} = req.body;
 
-    // Validation checks:
+    // Validations checks:
 
     const existingBook = findBookByTitle(title)
     if (existingBook){
@@ -28,6 +28,6 @@ const createBook = (req, res) => {
 
 }
 
-module.exports{
-    createBook
+module.exports = {
+    createBook,
 };
