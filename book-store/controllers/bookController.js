@@ -1,4 +1,4 @@
-const { Book, addBook, findBookByTitle, getFilteredBooks, findBookById, updateBookPrice } = require('../models/bookModel');
+const { books, Book, addBook, findBookByTitle, getFilteredBooks, findBookById, updateBookPrice, deleteBookById } = require('../models/bookModel');
 
 
 // Create book:
@@ -120,6 +120,22 @@ const updateBookPriceHandler = (req, res) => {
     res.status(200).json({ result: oldPrice });
 };
 
+// Remove book:
+const deleteBook = (req, res) => {
+    const bookId = parseInt(req.query.id)
+
+    const book =findBookById(bookId)
+
+    if (!book){
+        res.status(200).json({errorMessage: `Error: no such Book with id ${bookId}`})
+    }
+
+    if (deleteBookById(bookId)){
+        res.status(200).json({ result: books.length });
+    }
+    
+}
+
 
 
 module.exports = {
@@ -127,5 +143,6 @@ module.exports = {
     getTotalBooks,
     getBooks,
     getBookById,
-    updateBookPriceHandler
+    updateBookPriceHandler,
+    deleteBook
 };

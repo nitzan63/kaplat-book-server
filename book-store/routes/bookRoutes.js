@@ -12,5 +12,7 @@ router.get('/books', bookController.getBooks)
 router.get('/book', bookController.getBookById)
 // Route for updating the price of a book:
 router.put('/book', bookController.updateBookPriceHandler)
+// Route for deleting book
+router.delete('/book', bookController.deleteBook)
 
 module.exports = router
