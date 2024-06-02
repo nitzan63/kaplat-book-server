@@ -10,5 +10,7 @@ router.get('/books/total', bookController.getTotalBooks)
 router.get('/books', bookController.getBooks)
 // Route for getting single book data:
 router.get('/book', bookController.getBookById)
+// Route for updating the price of a book:
+router.put('/book', bookController.updateBookPriceHandler)
 
 module.exports = router

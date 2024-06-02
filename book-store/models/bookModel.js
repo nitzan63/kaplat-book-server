@@ -53,10 +53,21 @@ const findBookById = (id) => {
     return books.find(book => book.id === id)
 }
 
+const updateBookPrice = (id, newPrice) => {
+    const book = findBookById(id);
+    if (book) {
+        const oldPrice = book.price;
+        book.price = newPrice;
+        return oldPrice;
+    }
+    return null;
+};
+
 module.exports ={
     Book,
     addBook,
     findBookByTitle,
     getFilteredBooks,
-    findBookById
+    findBookById,
+    updateBookPrice
 }

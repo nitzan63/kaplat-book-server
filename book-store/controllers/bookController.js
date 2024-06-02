@@ -1,4 +1,4 @@
-const { Book, addBook, findBookByTitle, getFilteredBooks, findBookById } = require('../models/bookModel');
+const { Book, addBook, findBookByTitle, getFilteredBooks, findBookById, updateBookPrice } = require('../models/bookModel');
 
 
 // Create book:
@@ -99,10 +99,33 @@ const getBookById = (req, res) => {
     res.status(200).json(book)
 }
 
+// Update book price:
+
+const updateBookPriceHandler = (req, res) => {
+    const bookId = parseInt(req.query.id);
+    const newPrice = parseFloat(req.query.price);
+
+    const book = findBookById(bookId);
+
+    if (!book) {
+        return res.status(404).json({ errorMessage: `Error: no such Book with id ${bookId}` });
+    }
+
+    if (newPrice < 0) {
+        return res.status(409).json({ errorMessage: `Error: price update for book [${bookId}] must be a positive integer` });
+    }
+
+    const oldPrice = updateBookPrice(bookId, newPrice);
+
+    res.status(200).json({ result: oldPrice });
+};
+
+
 
 module.exports = {
     createBook,
     getTotalBooks,
     getBooks,
-    getBookById
+    getBookById,
+    updateBookPriceHandler
 };
