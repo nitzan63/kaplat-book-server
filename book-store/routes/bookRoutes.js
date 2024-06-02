@@ -4,7 +4,9 @@ const bookController = require('../controllers/bookController')
 
 // Route for creating a new book:
 router.post('/book' , bookController.createBook)
-
+// Route for getting the total number of books:
 router.get('/books/total', bookController.getTotalBooks)
+// Route for getting books data:
+router.get('/books', bookController.getBooks)
 
 module.exports = router

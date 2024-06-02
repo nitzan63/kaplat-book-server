@@ -56,9 +56,38 @@ const getTotalBooks = (req, res) => {
     res.status(200).json({result: filteredBooks.length})
 }
 
+// Get books:
+const getBooks = (req, res) => {
+    const filters = {
+        author: req.query.author,
+        priceBiggerThan: req.query['price-bigger-than'] ? parseFloat(req.query['price-bigger-than']) : null,
+        priceLessThan: req.query['price-less-than'] ? parseFloat(req.query['price-less-than']) : null,
+        yearBiggerThan: req.query['year-bigger-than'] ? parseInt(req.query['year-bigger-than']) : null,
+        yearLessThan: req.query['year-less-than'] ? parseInt(req.query['year-less-than']) : null,
+        genres: req.query.genres
+    };
+
+    if (filters.genres) {
+        const validGenres = ["SCI_FI", "NOVEL", "HISTORY", "MANGA", "ROMANCE", "PROFESSIONAL"];
+        const genresArray = filters.genres.split(',');
+        for (const genre of genresArray) {
+            if (!validGenres.includes(genre)) {
+                return res.status(400).json({ errorMessage: `Error: Invalid genre [${genre}]` });
+            }
+        }
+    }
+
+    let filteredBooks = getFilteredBooks(filters);
+
+    // Sort the books by title (case insensitive)
+    filteredBooks = filteredBooks.sort((a, b) => a.title.toLowerCase().localeCompare(b.title.toLowerCase()));
+
+    res.status(200).json(filteredBooks);
+};
 
 
 module.exports = {
     createBook,
-    getTotalBooks
+    getTotalBooks,
+    getBooks
 };
