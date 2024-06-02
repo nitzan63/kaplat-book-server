@@ -49,9 +49,14 @@ const getFilteredBooks = (filters) => {
     })
 }
 
+const findBookById = (id) => {
+    return books.find(book => book.id === id)
+}
+
 module.exports ={
     Book,
     addBook,
     findBookByTitle,
-    getFilteredBooks
+    getFilteredBooks,
+    findBookById
 }

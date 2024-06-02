@@ -8,5 +8,7 @@ router.post('/book' , bookController.createBook)
 router.get('/books/total', bookController.getTotalBooks)
 // Route for getting books data:
 router.get('/books', bookController.getBooks)
+// Route for getting single book data:
+router.get('/book', bookController.getBookById)
 
 module.exports = router

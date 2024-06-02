@@ -1,4 +1,4 @@
-const { Book, addBook, findBookByTitle, getFilteredBooks } = require('../models/bookModel');
+const { Book, addBook, findBookByTitle, getFilteredBooks, findBookById } = require('../models/bookModel');
 
 
 // Create book:
@@ -85,9 +85,24 @@ const getBooks = (req, res) => {
     res.status(200).json(filteredBooks);
 };
 
+//Get single book data:
+const getBookById = (req, res) => {
+    const bookId = parseInt(req.query.id)
+    const book = findBookById(bookId)
+
+    if (!book){
+        return res.status(404).json({
+            errorMessage: `Error: no such Book with id ${bookId}`
+        })
+    }
+
+    res.status(200).json(book)
+}
+
 
 module.exports = {
     createBook,
     getTotalBooks,
-    getBooks
+    getBooks,
+    getBookById
 };
