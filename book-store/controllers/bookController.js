@@ -1,7 +1,9 @@
-const { Book, addBook, findBookByTitle } = require('../models/bookModel');
+const { Book, addBook, findBookByTitle, getFilteredBooks } = require('../models/bookModel');
 
+
+// Create book:
 const createBook = (req, res) => {
-    const {title, author, year, price, genre} = req.body;
+    const {title, author, year, price, genres} = req.body;
 
     // Validations checks:
 
@@ -20,7 +22,7 @@ const createBook = (req, res) => {
 
     // Create new book:
 
-    const newBook = new Book(title, author, year, price, genre)
+    const newBook = new Book(title, author, year, price, genres)
     addBook(newBook)
 
     // Respond with the new book's ID
@@ -28,6 +30,35 @@ const createBook = (req, res) => {
 
 }
 
+// get totla books:
+
+const getTotalBooks = (req, res) => {
+    const filters = {
+        author: req.query.author,
+        priceBiggerThan: req.query['price-bigger-than'] ? parseFloat(req.query['price-bigger-than']) : null,
+        priceLessThan: req.query['price-less-than'] ? parseFloat(req.query['price-less-than']) : null,
+        yearBiggerThan: req.query['year-bigger-than'] ? parseInt(req.query['year-bigger-than']) : null,
+        yearLessThan: req.query['year-less-than'] ? parseInt(req.query['year-less-than']) : null,
+        genres: req.query.genres
+    }
+
+    if (filters.genres){
+        const validGenres = ["SCI_FI", "NOVEL", "HISTORY", "MANGA", "ROMANCE", "PROFESSIONAL"];
+        const genresArray = filters.genres.split(',');
+        for (const genre of genresArray) {
+            if (!validGenres.includes(genre)) {
+                return res.status(400).json({ errorMessage: `Error: Invalid genre [${genre}]` });
+            }
+        }
+    }
+
+    const filteredBooks = getFilteredBooks(filters);
+    res.status(200).json({result: filteredBooks.length})
+}
+
+
+
 module.exports = {
     createBook,
+    getTotalBooks
 };
