@@ -82,7 +82,7 @@ const getBooks = (req, res) => {
     // Sort the books by title (case insensitive)
     filteredBooks = filteredBooks.sort((a, b) => a.title.toLowerCase().localeCompare(b.title.toLowerCase()));
 
-    res.status(200).json(filteredBooks);
+    res.status(200).json({result: filteredBooks});
 };
 
 //Get single book data:
@@ -96,7 +96,7 @@ const getBookById = (req, res) => {
         })
     }
 
-    res.status(200).json(book)
+    res.status(200).json({result: book})
 }
 
 // Update book price:
@@ -127,7 +127,7 @@ const deleteBook = (req, res) => {
     const book =findBookById(bookId)
 
     if (!book){
-        res.status(200).json({errorMessage: `Error: no such Book with id ${bookId}`})
+        res.status(404).json({errorMessage: `Error: no such Book with id ${bookId}`})
     }
 
     if (deleteBookById(bookId)){
