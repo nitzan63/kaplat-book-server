@@ -1,17 +1,6 @@
 const { requestLogger, booksLogger } = require('../loggers');
 
-// Get logger by name:
-
-const getLoggerByName = (loggerName) => {
-  switch (loggerName) {
-    case 'request-logger':
-      return requestLogger;
-    case 'books-logger':
-      return booksLogger;
-    default:
-      return null;
-  }
-};
+// get loggers name:
 
 const loggers = {
   'request-logger': requestLogger,
@@ -36,11 +25,11 @@ const setLogLevel = (req, res) => {
   const logger = getLoggerByName(loggerName);
 
   if (!logger) {
-    res.status(400).send('Error: invalid logger name');
+    return res.status(400).send('Error: invalid logger name');
   }
 
   if (!['error', 'info', 'debug'].includes(loggerLevel)) {
-    res.status(400).send('Error: Invalid logger level');
+    return res.status(400).send('Error: Invalid logger level');
   }
 
   logger.level = loggerLevel;

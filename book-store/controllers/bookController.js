@@ -220,7 +220,7 @@ const deleteBook = (req, res) => {
 
   if (!book) {
     booksLogger.error(`Error: no such Book with id ${bookId}`);
-    res
+    return res
       .status(404)
       .json({ errorMessage: `Error: no such Book with id ${bookId}` });
   }

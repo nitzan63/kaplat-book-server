@@ -8,7 +8,15 @@ const port = 8574;
 
 app.use(bodyParser.json());
 
+// set request counter
 let requestCounter = 1;
+
+// Health check:
+app.get('/books/health', (req, res) => {
+  res.status(200).send('OK');
+});
+
+// Middleware for logging requests:
 
 app.use((req, res, next) => {
   const requestId = requestCounter++;
@@ -33,9 +41,4 @@ app.use(bookRoutes);
 
 app.listen(port, () => {
   console.log(`Server is running on: http://localhost:${port}/`);
-});
-
-// Health check:
-app.get('/books/health', (req, res) => {
-  res.status(200).send('OK');
 });
