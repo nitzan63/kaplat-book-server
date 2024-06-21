@@ -19,18 +19,25 @@ const createBook = (req, res) => {
 
   const existingBook = findBookByTitle(title);
   if (existingBook) {
+    booksLogger.error(
+      `Error: Book with the title [${title}] already exists in the system`
+    );
     return res.status(409).json({
       errorMessage: `Error: Book with the title [${title}] already exists in the system`,
     });
   }
 
   if (year < 1940 || year > 2100) {
+    booksLogger.error(
+      `Error: Can't create new Book that its year [${year}] is not in the accepted range [1940 -> 2100]`
+    );
     return res.status(409).json({
       errorMessage: `Error: Can't create new Book that its year [${year}] is not in the accepted range [1940 -> 2100]`,
     });
   }
 
   if (price < 0) {
+    booksLogger.error(`Error: Can't create new Book with negative price`);
     return res.status(409).json({
       errorMessage: `Error: Can't create new Book with negative price`,
     });
@@ -156,6 +163,7 @@ const getBookById = (req, res) => {
   const book = findBookById(bookId);
 
   if (!book) {
+    booksLogger.error(`Error: no such Book with id ${bookId}`);
     return res.status(404).json({
       errorMessage: `Error: no such Book with id ${bookId}`,
     });
@@ -175,12 +183,16 @@ const updateBookPriceHandler = (req, res) => {
   const book = findBookById(bookId);
 
   if (!book) {
+    booksLogger.error(`Error: no such Book with id ${bookId}`);
     return res
       .status(404)
       .json({ errorMessage: `Error: no such Book with id ${bookId}` });
   }
 
   if (newPrice < 0) {
+    booksLogger.error(
+      `Error: price update for book [${bookId}] must be a positive integer`
+    );
     return res.status(409).json({
       errorMessage: `Error: price update for book [${bookId}] must be a positive integer`,
     });
@@ -207,6 +219,7 @@ const deleteBook = (req, res) => {
   const book = findBookById(bookId);
 
   if (!book) {
+    booksLogger.error(`Error: no such Book with id ${bookId}`);
     res
       .status(404)
       .json({ errorMessage: `Error: no such Book with id ${bookId}` });
