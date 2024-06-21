@@ -1,3 +1,4 @@
+const { booksLogger } = require('../loggers');
 const {
   books,
   Book,
@@ -17,32 +18,33 @@ const createBook = (req, res) => {
 
   const existingBook = findBookByTitle(title);
   if (existingBook) {
-    return res
-      .status(409)
-      .json({
-        errorMessage: `Error: Book with the title [${title}] already exists in the system`,
-      });
+    return res.status(409).json({
+      errorMessage: `Error: Book with the title [${title}] already exists in the system`,
+    });
   }
 
   if (year < 1940 || year > 2100) {
-    return res
-      .status(409)
-      .json({
-        errorMessage: `Error: Can't create new Book that its year [${year}] is not in the accepted range [1940 -> 2100]`,
-      });
+    return res.status(409).json({
+      errorMessage: `Error: Can't create new Book that its year [${year}] is not in the accepted range [1940 -> 2100]`,
+    });
   }
 
   if (price < 0) {
-    return res
-      .status(409)
-      .json({
-        errorMessage: `Error: Can't create new Book with negative price`,
-      });
+    return res.status(409).json({
+      errorMessage: `Error: Can't create new Book with negative price`,
+    });
   }
 
   // Create new book:
 
   const newBook = new Book(title, author, year, price, genres);
+
+  // Log book creation info:
+  booksLogger.info(`Creating new Book with Title [${title}]`);
+  booksLogger.debug(
+    `Currently there are ${books.length} Books in the system. New Book will be assigned with id ${newBook.id}`
+  );
+
   addBook(newBook);
 
   // Respond with the new book's ID
@@ -169,11 +171,9 @@ const updateBookPriceHandler = (req, res) => {
   }
 
   if (newPrice < 0) {
-    return res
-      .status(409)
-      .json({
-        errorMessage: `Error: price update for book [${bookId}] must be a positive integer`,
-      });
+    return res.status(409).json({
+      errorMessage: `Error: price update for book [${bookId}] must be a positive integer`,
+    });
   }
 
   const oldPrice = updateBookPrice(bookId, newPrice);
