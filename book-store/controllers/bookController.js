@@ -91,6 +91,10 @@ const getTotalBooks = (req, res) => {
   }
 
   const filteredBooks = getFilteredBooks(filters);
+  booksLogger.info(
+    `Total Books found for requested filters is ${filteredBooks.length}`
+  );
+
   res.status(200).json({ result: filteredBooks.length });
 };
 
