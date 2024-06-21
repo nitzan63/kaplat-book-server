@@ -201,7 +201,7 @@ const updateBookPriceHandler = (req, res) => {
   const oldPrice = updateBookPrice(bookId, newPrice);
 
   //Log
-  const bookTitle = getBookTitle(bookId);
+  const bookTitle = book.title;
   booksLogger.info(`Update Book id [${bookId}] price to ${newPrice}`);
   if (bookTitle) {
     booksLogger.debug(
@@ -225,7 +225,7 @@ const deleteBook = (req, res) => {
       .json({ errorMessage: `Error: no such Book with id ${bookId}` });
   }
 
-  const bookTitle = getBookTitle(bookId);
+  const bookTitle = book.title;
 
   if (deleteBookById(bookId)) {
     // Log:

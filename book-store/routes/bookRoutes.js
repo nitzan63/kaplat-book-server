@@ -1,6 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const bookController = require('../controllers/bookController');
+const logController = require('../controllers/logController');
+
+// Routes for Book Controller:
 
 // Route for creating a new book:
 router.post('/book', bookController.createBook);
@@ -14,5 +17,12 @@ router.get('/book', bookController.getBookById);
 router.put('/book', bookController.updateBookPriceHandler);
 // Route for deleting book
 router.delete('/book', bookController.deleteBook);
+
+// Routes for Log Controller:
+
+// Route for getting log level:
+router.get('/logs/level', logController.getLogLevel);
+// Route for changing log level:
+router.put('/logs/level', logController.setLogLevel);
 
 module.exports = router;
