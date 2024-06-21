@@ -212,7 +212,18 @@ const deleteBook = (req, res) => {
       .json({ errorMessage: `Error: no such Book with id ${bookId}` });
   }
 
+  const bookTitle = getBookTitle(bookId);
+
   if (deleteBookById(bookId)) {
+    // Log:
+
+    if (bookTitle) {
+      booksLogger.info(`Removing book [${bookTitle}]`);
+      booksLogger.debug(
+        `After removing book [${bookTitle}] id:[${bookId}] there are ${books.length} books in the system`
+      );
+    }
+
     res.status(200).json({ result: books.length });
   }
 };
