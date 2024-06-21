@@ -153,6 +153,8 @@ const getBookById = (req, res) => {
     });
   }
 
+  booksLogger.debug(`Fetching book id ${bookId} details`);
+
   res.status(200).json({ result: book });
 };
 

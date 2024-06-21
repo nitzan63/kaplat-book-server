@@ -18,7 +18,7 @@ const booksLogger = createLogger({
   level: 'info',
   format: combine(timestamp({ format: 'DD-MM-YYYY HH:mm:ss.SSS' }), logFormat),
   transports: [
-    new transports.File({ filename: 'logs/books.log' }),
+    new transports.File({ filename: 'logs/books.log', level: 'debug' }),
     new transports.Console({ level: 'debug' }),
   ],
 });
