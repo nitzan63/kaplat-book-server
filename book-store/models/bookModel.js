@@ -67,6 +67,14 @@ const updateBookPrice = (id, newPrice) => {
   return null;
 };
 
+const getBookTitle = (id) => {
+  const book = findBookById(id);
+  if (book) {
+    return book.title;
+  }
+  return null;
+};
+
 const deleteBookById = (id) => {
   const bookIndex = books.findIndex((book) => book.id === id);
   if (bookIndex != -1) {
@@ -85,4 +93,5 @@ module.exports = {
   findBookById,
   updateBookPrice,
   deleteBookById,
+  getBookTitle,
 };

@@ -8,6 +8,7 @@ const {
   findBookById,
   updateBookPrice,
   deleteBookById,
+  getBookTitle,
 } = require('../models/bookModel');
 
 // Create book:
@@ -186,6 +187,15 @@ const updateBookPriceHandler = (req, res) => {
   }
 
   const oldPrice = updateBookPrice(bookId, newPrice);
+
+  //Log
+  const bookTitle = getBookTitle(bookId);
+  booksLogger.info(`Update Book id [${bookId}] price to ${newPrice}`);
+  if (bookTitle) {
+    booksLogger.debug(
+      `Book [${bookTitle}] price changed: ${oldPrice} --> ${newPrice}`
+    );
+  }
 
   res.status(200).json({ result: oldPrice });
 };
