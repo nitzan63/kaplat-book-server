@@ -22,7 +22,7 @@ const getLogLevel = (req, res) => {
 const setLogLevel = (req, res) => {
   const loggerName = req.query['logger-name'];
   const loggerLevel = req.query['logger-level'].toLowerCase();
-  const logger = getLoggerByName(loggerName);
+  const logger = loggers[loggerName];
 
   if (!logger) {
     return res.status(400).send('Error: invalid logger name');
