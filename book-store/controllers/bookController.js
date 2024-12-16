@@ -11,14 +11,15 @@ const {
   getBookTitle,
 } = require('../models/bookModel');
 
+const dbManager = require('../models/dbManager');
+
 // Create book:
-const createBook = (req, res) => {
+const createBook = async (req, res) => {
   const { title, author, year, price, genres } = req.body;
 
   // Validations checks:
 
-  const existingBook = findBookByTitle(title);
-  if (existingBook) {
+  if (await dbManager.isBookTitleExists(title)) {
     booksLogger.error(
       `Error: Book with the title [${title}] already exists in the system`
     );
@@ -45,7 +46,7 @@ const createBook = (req, res) => {
 
   // Create new book:
 
-  const newBook = new Book(title, author, year, price, genres);
+  const newBookData = { title, author, year, price, genres };
 
   // Log book creation info:
   booksLogger.info(`Creating new Book with Title [${title}]`);
@@ -53,10 +54,10 @@ const createBook = (req, res) => {
     `Currently there are ${books.length} Books in the system. New Book will be assigned with id ${newBook.id}`
   );
 
-  addBook(newBook);
+  const newBookId = await dbManager.addBook(newBookData);
 
   // Respond with the new book's ID
-  res.status(200).json({ result: newBook.id });
+  res.status(200).json({ result: newBookId });
 };
 
 // get totla books:
