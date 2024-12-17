@@ -187,7 +187,7 @@ const updateBookPriceHandler = async (req, res) => {
     });
   }
 
-  const oldPrice = await dbManager.updateBookPrice(bookId, newPrice);
+  const oldPrice = dbManager.updateBookPrice(bookId, newPrice);
 
   //Log
   const bookTitle = book.title;
