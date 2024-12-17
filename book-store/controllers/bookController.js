@@ -50,7 +50,7 @@ const createBook = async (req, res) => {
 
 // get totla books:
 
-const getTotalBooks = (req, res) => {
+const getTotalBooks = async (req, res) => {
   const filters = {
     author: req.query.author,
     priceBiggerThan: req.query['price-bigger-than']
@@ -96,7 +96,7 @@ const getTotalBooks = (req, res) => {
 };
 
 // Get books:
-const getBooks = (req, res) => {
+const getBooks = async (req, res) => {
   const filters = {
     author: req.query.author,
     priceBiggerThan: req.query['price-bigger-than']
@@ -165,8 +165,7 @@ const getBookById = (req, res) => {
 };
 
 // Update book price:
-
-const updateBookPriceHandler = (req, res) => {
+const updateBookPriceHandler = async (req, res) => {
   const bookId = parseInt(req.query.id);
   const newPrice = parseFloat(req.query.price);
 
@@ -203,7 +202,7 @@ const updateBookPriceHandler = (req, res) => {
 };
 
 // Remove book:
-const deleteBook = (req, res) => {
+const deleteBook = async (req, res) => {
   const bookId = parseInt(req.query.id);
 
   const book = dbManager.findBookById(bookId);
