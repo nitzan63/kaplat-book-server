@@ -2,13 +2,6 @@ const { booksLogger } = require('../loggers');
 const {
   books,
   Book,
-  addBook,
-  findBookByTitle,
-  getFilteredBooks,
-  findBookById,
-  updateBookPrice,
-  deleteBookById,
-  getBookTitle,
 } = require('../models/bookModel');
 
 const dbManager = require('../models/dbManager');
@@ -99,7 +92,7 @@ const getTotalBooks = (req, res) => {
     }
   }
 
-  const filteredBooks = getFilteredBooks(filters);
+  const filteredBooks = dbManager.getFilteredBooks(filters);
   booksLogger.info(
     `Total Books found for requested filters is ${filteredBooks.length}`
   );
@@ -145,7 +138,7 @@ const getBooks = (req, res) => {
     }
   }
 
-  let filteredBooks = getFilteredBooks(filters);
+  let filteredBooks = dbManager.getFilteredBooks(filters);
 
   // Sort the books by title (case insensitive)
   filteredBooks = filteredBooks.sort((a, b) =>
@@ -161,7 +154,8 @@ const getBooks = (req, res) => {
 //Get single book data:
 const getBookById = (req, res) => {
   const bookId = parseInt(req.query.id);
-  const book = findBookById(bookId);
+  const persistenceMethod = req.query.persistenceMethod;
+  const book = dbManager.findBookById(bookId, persistenceMethod);
 
   if (!book) {
     booksLogger.error(`Error: no such Book with id ${bookId}`);
@@ -181,7 +175,7 @@ const updateBookPriceHandler = (req, res) => {
   const bookId = parseInt(req.query.id);
   const newPrice = parseFloat(req.query.price);
 
-  const book = findBookById(bookId);
+  const book = dbManager.findBookById(bookId);
 
   if (!book) {
     booksLogger.error(`Error: no such Book with id ${bookId}`);
@@ -199,7 +193,7 @@ const updateBookPriceHandler = (req, res) => {
     });
   }
 
-  const oldPrice = updateBookPrice(bookId, newPrice);
+  const oldPrice = await dbManager.updateBookPrice(bookId, newPrice);
 
   //Log
   const bookTitle = book.title;
@@ -217,7 +211,7 @@ const updateBookPriceHandler = (req, res) => {
 const deleteBook = (req, res) => {
   const bookId = parseInt(req.query.id);
 
-  const book = findBookById(bookId);
+  const book = dbManager.findBookById(bookId);
 
   if (!book) {
     booksLogger.error(`Error: no such Book with id ${bookId}`);
@@ -228,7 +222,7 @@ const deleteBook = (req, res) => {
 
   const bookTitle = book.title;
 
-  if (deleteBookById(bookId)) {
+  if (dbManager.deleteBookById(bookId)) {
     // Log:
 
     if (bookTitle) {

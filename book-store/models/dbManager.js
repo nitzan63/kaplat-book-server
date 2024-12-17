@@ -84,6 +84,55 @@ class DBManager {
                 return await mongoOperations.getFilteredBooks(filters);
         }
     }
+
+    async findBookById(id, persistenceMethod = PERSISTENCE_METHODS.POSTGRES) {
+        this._validatePersistenceMethod(persistenceMethod);
+        switch (persistenceMethod) {
+            case PERSISTENCE_METHODS.POSTGRES:
+                return await postgresOperations.findBookById(id);
+            case PERSISTENCE_METHODS.MONGO:
+                return await mongoOperations.findBookById(id);
+        }
+    }
+
+    async updateBookPrice(id, newPrice) {
+        const pgOldPrice = await postgresOperations.updateBookPrice(id, newPrice);
+        const mongoOldPrice = await mongoOperations.updateBookPrice(id, newPrice);
+        if (pgOldPrice != mongoOldPrice) {
+            throw new Error(`Mismatch in book price for id: ${id}`);
+        }
+        return pgOldPrice;
+    }
+
+    async getBookTitle(id, persistenceMethod = PERSISTENCE_METHODS.POSTGRES) {
+        this._validatePersistenceMethod(persistenceMethod);
+        switch (persistenceMethod) {
+            case PERSISTENCE_METHODS.POSTGRES:
+                return await postgresOperations.getBookTitle(id);
+            case PERSISTENCE_METHODS.MONGO:
+                return await mongoOperations.getBookTitle(id);
+        }
+    }
+
+    async deleteBookById(id) {
+        const pgResult = await postgresOperations.deleteBookById(id);
+        const mongoResult = await mongoOperations.deleteBookById(id);
+        if (pgResult != mongoResult) {
+            throw new Error(`Mismatch in book deletion for id: ${id}`);
+        }
+        return pgResult;
+    }
+
+    async getBooksCount() {
+        const pgCount = await postgresOperations.getBooksCount();
+        const mongoCount = await mongoOperations.getBooksCount();
+        if (pgCount != mongoCount) {
+            throw new Error(`Mismatch in book count`);
+        }
+        return pgCount;
+    }
+
+
 }
 
 module.exports = new DBManager();
