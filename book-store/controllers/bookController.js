@@ -1,9 +1,4 @@
 const { booksLogger } = require('../loggers');
-const {
-  books,
-  Book,
-} = require('../models/bookModel');
-
 const dbManager = require('../models/dbManager');
 
 // Create book:
